@@ -1,23 +1,30 @@
 import streamlit as st
-from datetime import datetime
 
 MENU_ITEMS = [
-    {"name": "Dashboard", "path": "dashboard/app.py", "icon": "📊"},
-    {"name": "Clientes en Riesgo", "path": "dashboard/pages/01_Clientes_Riesgo.py", "icon": "⚠️"},
-    {"name": "Análisis Territorial", "path": "dashboard/pages/02_Analisis_Territorial.py", "icon": "🗺️"},
-    {"name": "Análisis Coolers", "path": "dashboard/pages/03_Analisis_Coolers.py", "icon": "🧊"},
-    {"name": "Predicción Individual", "path": "dashboard/pages/04_Prediccion_Individual.py", "icon": "🎯"},
-    {"name": "Recomendaciones", "path": "dashboard/pages/05_Recomendaciones.py", "icon": "🧩"},
+    {"name": "Dashboard", "path": "app", "icon": "📊"},
+    {"name": "Clientes en Riesgo", "path": "01_Clientes_Riesgo", "icon": "⚠️"},
+    {"name": "Análisis Territorial", "path": "02_Analisis_Territorial", "icon": "🗺️"},
+    {"name": "Análisis Coolers", "path": "03_Analisis_Coolers", "icon": "🧊"},
+    {"name": "Predicción Individual", "path": "04_Prediccion_Individual", "icon": "🎯"},
+    {"name": "Recomendaciones", "path": "05_Recomendaciones", "icon": "🧩"},
 ]
 
-
 def render_sidebar(active_page: str) -> None:
+    st.sidebar.markdown(
+        "<div style='padding: 10px 0px;'><h3 style='margin:0; font-size:1.1rem; opacity:0.8;'>Navegación</h3></div>", 
+        unsafe_allow_html=True
+    )
+    
     for item in MENU_ITEMS:
         active_class = "active" if item["name"] == active_page else ""
-        link = f"?page={item['path']}"
+        
+        # En Streamlit multipágina nativo, apuntamos al nombre del archivo directamente si está expuesto
+        link = f"/{item['path']}" if item['path'] != "app" else "/"
+        
         st.sidebar.markdown(
-            f"<a href='{link}' class='sidebar-link {active_class}' style='display:flex; align-items:center; gap:12px; padding:14px 16px;'>"
-            f"<span class='icon-chip'>{item['icon']}</span><span style='font-weight:700; font-size:0.98rem;'>{item['name']}</span>"
+            f"<a href='{link}' target='_self' class='sidebar-link {active_class}'>"
+            f"<span class='icon-chip'>{item['icon']}</span>"
+            f"<span>{item['name']}</span>"
             f"</a>",
             unsafe_allow_html=True,
         )
