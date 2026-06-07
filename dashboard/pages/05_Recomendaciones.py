@@ -22,7 +22,7 @@ st.set_page_config(
 
 try:
     apply_theme()
-    render_sidebar(active_page="Recomendaciones Estratégicas")
+    render_sidebar(active_page="Recomendaciones")
     render_header(
         title="Recomendaciones Estratégicas",
         subtitle="Acciones priorizadas para reducir churn y recuperar clientes.",

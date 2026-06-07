@@ -22,7 +22,7 @@ st.set_page_config(
 
 try:
     apply_theme()
-    render_sidebar(active_page="Análisis de Coolers")
+    render_sidebar(active_page="Análisis Coolers")
     render_header(
         title="Análisis de Coolers",
         subtitle="Evalúa la influencia de los coolers en el churn de clientes.",

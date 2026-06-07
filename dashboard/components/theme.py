@@ -48,7 +48,8 @@ def apply_theme() -> None:
         background: {theme['background']} !important;
     }}
     .block-container {{
-        padding-top: 0.75rem !important;
+        padding-top: 0rem !important;
+        margin-top: 0rem !important;
         padding-bottom: 1.5rem !important;
         padding-left: 1.75rem !important;
         padding-right: 1.75rem !important;
@@ -63,12 +64,26 @@ def apply_theme() -> None:
         padding-top: 0 !important;
         margin-top: 0 !important;
     }}
-    header, [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"], [data-testid="stStatusWidget"], button[kind="header"], [data-testid="stDeployButton"], #MainMenu, footer, .css-hxt7ib {{
-        visibility: hidden !important;
-        height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        display: none !important;
+    header {{
+        display:none !important;
+    }}
+    [data-testid="stHeader"]{{
+        display:none !important;
+    }}
+    [data-testid="stToolbar"]{{
+        display:none !important;
+    }}
+    [data-testid="stDecoration"]{{
+        display:none !important;
+    }}
+    [data-testid="stStatusWidget"]{{
+        display:none !important;
+    }}
+    #MainMenu{{
+        display:none !important;
+    }}
+    footer{{
+        display:none !important;
     }}
     .glass-card {{
         background: {theme['glass']};

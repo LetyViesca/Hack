@@ -10,7 +10,7 @@ def render_header(title: str, subtitle: str) -> None:
 
     header_html = f"""
     <div style='position:sticky; top:0; z-index:9999; margin:0; padding:0;'>
-      <div class='glass-card' style='display:flex; align-items:center; justify-content:space-between; padding:20px 24px; gap:18px;'>
+      <div class='glass-card' style='height:140px; min-height:140px; padding:24px; border-radius:24px; display:flex; align-items:center; justify-content:space-between; gap:18px;'>
         <div style='display:flex; align-items:center; gap:14px; min-width:0;'>
           <div style='width:52px; height:52px; border-radius:14px; background: linear-gradient(135deg, #FF2D6F, #FF5C8A); display:flex; align-items:center; justify-content:center; font-size:1.3rem; box-shadow: 0 16px 40px rgba(255,45,111,0.22);'>🌹</div>
           <div style='min-width:0;'>

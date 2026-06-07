@@ -12,7 +12,6 @@ MENU_ITEMS = [
 
 
 def render_sidebar(active_page: str) -> None:
-    st.sidebar.markdown("<div style='padding-top:6px;'></div>", unsafe_allow_html=True)
     for item in MENU_ITEMS:
         active_class = "active" if item["name"] == active_page else ""
         link = f"?page={item['path']}"
@@ -22,6 +21,3 @@ def render_sidebar(active_page: str) -> None:
             f"</a>",
             unsafe_allow_html=True,
         )
-    st.sidebar.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
-    st.sidebar.markdown("<div style='color:#CBD5E1; font-size:0.84rem; padding:0 16px;'>Navegación ejecutiva - selecciona un área de análisis.</div>", unsafe_allow_html=True)
-    st.sidebar.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)

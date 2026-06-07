@@ -22,7 +22,7 @@ st.set_page_config(
 
 try:
     apply_theme()
-    render_sidebar(active_page="Dashboard Ejecutivo")
+    render_sidebar(active_page="Dashboard")
     render_header(
         title="Dashboard Ejecutivo",
         subtitle="Visión global del churn con métricas clave y señales de acción ejecutiva.",
