@@ -12,6 +12,8 @@ from components.theme import apply_theme, get_theme_config, get_plotly_template
 from components.sidebar import render_sidebar
 from components.header import render_header
 from components.kpi_card import render_kpi_card
+from ml.model_service import predict_risk
+from services.data_service import build_analytics_frame, score_to_level
 
 st.set_page_config(
     page_title="Clientes en Riesgo | Rose Intelligence",
@@ -29,26 +31,20 @@ try:
         subtitle="Prioriza clientes con mayor probabilidad de abandono comercial.",
     )
 
-    # Mock Data
-    clientes = [f"C-{1000 + i}" for i in range(1, 61)]
-    territorios = ["Norte", "Centro", "Sur"]
-    canales = ["Retail", "Digital", "Distribuidor"]
-    ventas = [120000 - i * 1500 for i in range(60)]
-    coolers = [i % 4 for i in range(60)]
-    score_churn = [98 - i for i in range(60)]
-
-    cliente_data = pd.DataFrame({
-        "Cliente": clientes,
-        "Territorio": [territorios[i % len(territorios)] for i in range(len(clientes))],
-        "Canal": [canales[i % len(canales)] for i in range(len(clientes))],
-        "Ventas": ventas,
-        "Coolers": coolers,
-        "Score Churn": score_churn,
-    })
-    
-    cliente_data["Nivel Riesgo"] = cliente_data["Score Churn"].apply(
-        lambda value: "Alto" if value >= 70 else "Medio" if value >= 45 else "Bajo"
+    scored = predict_risk(build_analytics_frame()).copy()
+    cliente_data = scored[["customer_name", "territory", "channel", "total_sales", "num_coolers", "score_risk", "risk_level"]].rename(
+        columns={
+            "customer_name": "Cliente",
+            "territory": "Territorio",
+            "channel": "Canal",
+            "total_sales": "Ventas",
+            "num_coolers": "Coolers",
+            "score_risk": "Score Churn",
+            "risk_level": "Nivel Riesgo",
+        }
     )
+    territorios = sorted(cliente_data["Territorio"].dropna().unique().tolist())
+    canales = sorted(cliente_data["Canal"].dropna().unique().tolist())
 
     # Sección de Control Superior (Grid de Filtros)
     st.markdown("<div class='section-title'>Filtros de Segmentación</div>", unsafe_allow_html=True)
@@ -127,10 +123,11 @@ try:
         if client_choice != "N/A":
             selected = filtered[filtered['Cliente'] == client_choice].iloc[0]
             recommendation_text = "🔴 Contactar inmediatamente vía Dirección Comercial." if selected['Nivel Riesgo'] == "Alto" else "🟡 Agendar llamada de seguimiento preventivo." if selected['Nivel Riesgo'] == "Medio" else "🟢 Mantener flujo estándar de atención."
-            
+            accent_color = "#FF2D6F" if selected['Nivel Riesgo'] == "Alto" else "#F59E0B" if selected['Nivel Riesgo'] == "Medio" else "#10B981"
+
             # Tarjeta de Detalle Ejecutivo Ultra Limpia
             st.markdown(f"""
-            <div class='glass-card' style='border-left: 5px solid {PRIMARY if selected['Nivel Riesgo'] == 'Alto' else '#F59E0B' if selected['Nivel Riesgo'] == 'Medio' else '#10B981'};'>
+            <div class='glass-card' style='border-left: 5px solid {accent_color};'>
                 <p class='metric-label' style='margin:0;'>ID CLIENTE</p>
                 <h2 style='margin:0 0 15px 0; font-weight:800; color:{theme["text"]};'>{selected['Cliente']}</h2>
                 
