@@ -71,11 +71,11 @@ import pandas as pd
 # Ejemplo: y_pred = modelo.predict(X_test)
 
 # 2. Cargas el archivo de la imagen (el que está incompleto)
-df_entrega = pd.read_csv('tu_archivo_incompleto.csv')  # o pd.read_excel si es un .xlsx
+df_entrega = pd.read_csv('https://github.com/LetyViesca/Hack/blob/bb3ff8c723cae46c3c145304cdb8dd7fc4e7fed0/docs/preds_submission.csv')  # o pd.read_excel si es un .xlsx
 
 # 3. Rellenas la columna 'target' con tus predicciones mapeadas a 0 y 1
 df_entrega['target'] = y_pred
 
 # 4. Guardas el archivo final ya completado
-df_entrega.to_csv('Entrega_Churn_Completa.csv', index=False)
+df_entrega.to_csv('https://github.com/LetyViesca/Hack/blob/bb3ff8c723cae46c3c145304cdb8dd7fc4e7fed0/docs/preds_submission.csv', index=False)
 print("¡Archivo completado y guardado con éxito!")
