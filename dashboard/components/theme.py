@@ -1,128 +1,111 @@
 import streamlit as st
-import plotly.io as pio
 
-PRIMARY = "#FF2D6F"
-SECONDARY = "#FF5C8A"
-ACCENT = "#FB7185"
-ACCENT_2 = "#F9A8D4"
-ACCENT_3 = "#FDA4AF"
+def get_theme_config():
+    """Retorna la configuración de colores oficial de Rose Intelligence."""
+    return {
+        "primary": "#FF2D6F",          # Rosa Neón Core
+        "background": "#0D0E12",       # Fondo Oscuro Profundo Muted
+        "card": "rgba(22, 25, 35, 0.65)", # Tarjeta con Transparencia (Glassmorphism)
+        "text": "#FFFFFF",             # Texto Principal Blanco Puro
+        "text_secondary": "#94A3B8",   # Texto Secundario Gris Slate
+        "border": "rgba(255, 45, 111, 0.15)", # Bordes sutiles rosa neón
+        "accent": "#10B981"            # Verde Esmeralda para KPI positivos
+    }
 
-DARK = {
-    "background": "#0F172A",
-    "surface": "#111827",
-    "card": "rgba(255,255,255,0.06)",
-    "glass": "rgba(15,23,42,0.65)",
-    "border": "rgba(255,255,255,0.08)",
-    "text": "#F8FAFC",
-    "text_secondary": "#CBD5E1",
-}
-
-LIGHT = {
-    "background": "#F8FAFC",
-    "surface": "#E2E8F0",
-    "card": "rgba(255,255,255,0.80)",
-    "glass": "rgba(255,255,255,0.75)",
-    "border": "rgba(15,23,42,0.08)",
-    "text": "#0F172A",
-    "text_secondary": "#475569",
-}
-
-def get_theme_config() -> dict:
-    if "ri_theme" not in st.session_state:
-        st.session_state["ri_theme"] = "dark"
-    return LIGHT if st.session_state["ri_theme"] == "light" else DARK
-
-def apply_theme() -> None:
+def apply_theme():
+    """Inyecta el CSS global premium para forzar el layout corporativo impecable."""
     theme = get_theme_config()
-    is_light = st.session_state["ri_theme"] == "light"
     
-    theme_css = f"""
+    css = f"""
     <style>
-    :root {{
-        color-scheme: {'light' if is_light else 'dark'};
-        font-family: 'Inter', system-ui, sans-serif;
-    }}
-    /* Forzar fondo de la app */
-    .stApp, [data-testid="stAppViewContainer"] {{
-        background-color: {theme['background']} !important;
-    }}
-    /* Remover márgenes superiores nativos molestos */
-    [data-testid="stMainBlockContainer"] {{
-        padding-top: 2rem !important;
-        padding-bottom: 3rem !important;
-        padding-left: 2rem !important;
-        padding-right: 2rem !important;
-    }}
-    /* Ocultar decoradores por defecto de Streamlit */
-    [data-testid="stHeader"], footer, #MainMenu {{
-        visibility: hidden !important;
-        display: none !important;
-    }}
-    /* Estilos globales de tarjetas */
-    .glass-card {{
-        background: {theme['card']} !important;
-        border: 1px solid {theme['border']} !important;
-        border-radius: 16px;
-        backdrop-filter: blur(16px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        padding: 20px;
-        transition: transform .2s ease, box-shadow .2s ease;
-    }}
-    .glass-card:hover {{
-        transform: translateY(-2px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    }}
-    .sidebar-link {{
-        color: {theme['text']} !important;
-        text-decoration: none !important;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 16px;
-        border-radius: 12px;
-        margin-bottom: 6px;
-        font-weight: 600;
-        transition: all 0.2s ease;
-    }}
-    .sidebar-link:hover {{
-        background: rgba(255, 255, 255, 0.05);
-        padding-left: 20px;
-    }}
-    .sidebar-link.active {{
-        background: linear-gradient(90deg, {PRIMARY}, {SECONDARY}) !important;
-        color: #FFFFFF !important;
-        box-shadow: 0 8px 20px rgba(225,29,72,0.2);
-    }}
-    .icon-chip {{
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        background: rgba(255,255,255,0.08);
-        font-size: 1.1rem;
-    }}
+        /* Imponer fondo oscuro profundo y eliminar parpadeos de color */
+        html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {{
+            background-color: {theme["background"]} !important;
+            color: {theme["text"]} !important;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }}
+        
+        /* Estilizar barra lateral (Sidebar) con opacidad elegante */
+        [data-testid="stSidebar"] {{
+            background-color: rgba(15, 17, 23, 0.85) !important;
+            border-right: 1px solid {theme["border"]} !important;
+            backdrop-filter: blur(12px);
+        }}
+
+        /* Forzar visibilidad de textos en títulos y subtítulos */
+        h1, h2, h3, h4, h5, h6, p, span, label {{
+            color: {theme["text"]} !important;
+        }}
+        
+        /* Contenedores Premium con Efecto Glassmorphism (Transparencias y Desenfoque) */
+        .glass-card, [data-testid="stMetric"] {{
+            background: {theme["card"]} !important;
+            backdrop-filter: blur(16px) saturate(120%);
+            -webkit-backdrop-filter: blur(16px) saturate(120%);
+            border: 1px solid {theme["border"]} !important;
+            border-radius: 14px !important;
+            padding: 20px !important;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }}
+        
+        /* Animación suave hover al pasar el mouse por las tarjetas */
+        .glass-card:hover, [data-testid="stMetric"]:hover {{
+            transform: translateY(-4px);
+            border-color: rgba(255, 45, 111, 0.4) !important;
+            box-shadow: 0 12px 40px 0 rgba(255, 45, 111, 0.1) !important;
+        }}
+
+        /* Reparar y estilizar los contenedores nativos de métricas de Streamlit */
+        [data-testid="stMetricValue"] {{
+            color: {theme["text"]} !important;
+            font-size: 2rem !important;
+            font-weight: 700 !important;
+            margin-top: 4px !important;
+        }}
+        
+        [data-testid="stMetricLabel"] {{
+            color: {theme["text_secondary"]} !important;
+            font-size: 0.85rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+        }}
+
+        /* Ocultar bloques duplicados molestos del Theme Switcher que rompen el Header */
+        [data-testid="stHorizontalBlock"] button {{
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: {theme["text"]} !important;
+            border-radius: 8px !important;
+        }}
+        
+        /* Clases auxiliares de control de títulos de sección */
+        .section-title {{
+            font-size: 1.3rem !important;
+            font-weight: 700 !important;
+            color: {theme["text"]} !important;
+            margin-bottom: 6px !important;
+            letter-spacing: -0.02em;
+        }}
+        
+        .section-subtitle {{
+            font-size: 0.9rem !important;
+            color: {theme["text_secondary"]} !important;
+            margin-bottom: 20px !important;
+        }}
     </style>
     """
-    st.markdown(theme_css, unsafe_allow_html=True)
+    st.markdown(css, unsafe_allow_html=True)
 
-    # Configuración del Template de Plotly
-    try:
-        template_name = "rose_intel_light" if is_light else "rose_intel_dark"
-        if template_name not in pio.templates:
-            base_template = pio.templates["plotly_white"] if is_light else pio.templates["plotly_dark"]
-            pio.templates[template_name] = base_template
-            
-        pio.templates[template_name].layout.update(
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(color=theme["text"], family="Inter, sans-serif"),
-            colorway=[PRIMARY, SECONDARY, ACCENT, ACCENT_2, ACCENT_3],
-            margin=dict(l=20, r=20, t=40, b=20)
-        )
-    except Exception:
-        pass
-
-def get_plotly_template() -> str:
-    return "rose_intel_light" if st.session_state.get("ri_theme", "dark") == "light" else "rose_intel_dark"
+def get_plotly_template():
+    """Genera una plantilla oscura estilizada para gráficos de Plotly."""
+    theme = get_theme_config()
+    import plotly.graph_objects as go
+    
+    template = go.layout.Template()
+    template.layout.paper_bgcolor = "rgba(0,0,0,0)" # Transparente para usar el fondo del contenedor
+    template.layout.plot_bgcolor = "rgba(0,0,0,0)"
+    template.layout.font = dict(color=theme["text"], family="Inter")
+    template.layout.hoverlabel = dict(bgcolor=theme["background"], font_color=theme["text"])
+    
+    return template
