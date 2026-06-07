@@ -47,13 +47,20 @@ def apply_theme() -> None:
     html, body, #root {{
         background: {theme['background']} !important;
     }}
-    .block-container {{
+    body, html, #root, .streamlit-container, .stApp {{
+        background: {theme['background']} !important;
+    }}
+    .block-container, .stApp .main, .stApp .block-container {{
         padding-top: 0rem !important;
         margin-top: 0rem !important;
         padding-bottom: 1.5rem !important;
         padding-left: 1.75rem !important;
         padding-right: 1.75rem !important;
         background: transparent !important;
+    }}
+    .main > div:first-child, .stApp > main > div:nth-child(1), .css-1lsmgbg.e1fqkh3o2, .css-18e3th9, .css-1d391kg, .css-1v3fvcr {{
+        padding-top: 0 !important;
+        margin-top: 0 !important;
     }}
     .stSidebar {{
         background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(15,23,42,0.88)) !important;
@@ -86,16 +93,29 @@ def apply_theme() -> None:
         display:none !important;
     }}
     .glass-card {{
-        background: {theme['glass']};
+        background: {'rgba(255,255,255,0.88)' if st.session_state.get('ri_theme','dark') == 'light' else 'rgba(15,23,42,0.90)'};
         border: 1px solid {theme['border']};
         border-radius: 24px;
-        backdrop-filter: blur(20px);
-        box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        backdrop-filter: blur(24px);
+        box-shadow: 0 24px 80px rgba(0,0,0,0.18);
         transition: transform .25s ease, box-shadow .25s ease, opacity .3s ease;
     }}
     .glass-card:hover {{
-        transform: translateY(-4px) scale(1.01);
-        box-shadow: 0 24px 70px rgba(0,0,0,0.28);
+        transform: translateY(-5px) scale(1.01);
+        box-shadow: 0 28px 90px rgba(0,0,0,0.22);
+    }}
+    .theme-pill {{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px 14px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: {theme['text']};
+        background: rgba(255,255,255,0.08);
+        font-weight: 700;
+        font-size: 0.95rem;
     }}
     .glass-panel {{
         background: {theme['glass']};
@@ -146,6 +166,7 @@ def apply_theme() -> None:
         margin: 0;
         line-height: 1;
         font-weight: 700;
+        letter-spacing: -0.03em;
     }}
     .detail-card {{
         background: rgba(255,255,255,0.08);
